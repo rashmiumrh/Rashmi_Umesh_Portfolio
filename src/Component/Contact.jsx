@@ -81,7 +81,7 @@ const currentYear = new Date().getFullYear();
           <path d="M14 2H6C4.89 2 4 2.9 4 4V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V8L14 2M18 20H6V4H13V9H18V20M12 19L8 15H10.5V12H13.5V15H16L12 19Z"/>
         </svg>
       ),
-      link: "https://drive.google.com/file/d/1I7ML4Kf9Gz2upSCzzbyDgmJKVqVmeblU/view",
+      link: "https://drive.google.com/file/d/1rprmq0h5pqfO7IZ7eaVVp0nHr5-E3qsT/view",
       color: "#d4af37"
     }
   ];
