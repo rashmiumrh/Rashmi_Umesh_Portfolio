@@ -101,7 +101,8 @@ const Skills = ({ isVisible }) => {
           <div key={catIndex} className="skill-category">
             <h4 className="category-title">
               <span className="decorative-dot"></span>
-              {category.category}
+              {category.category}               <span className="decorative-dot"></span>
+
             </h4>
 
             <div className="skills-showcase">
@@ -124,7 +125,8 @@ const Skills = ({ isVisible }) => {
         <div className="skill-category">
           <h4 className="category-title">
             <span className="decorative-dot"></span>
-            Professional Skills
+            Professional Skills             <span className="decorative-dot"></span>
+
           </h4>
 
           <div className="soft-skills-grid">

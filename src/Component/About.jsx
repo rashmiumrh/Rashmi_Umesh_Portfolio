@@ -59,7 +59,8 @@ const About = ({ setActiveNav }) => {
           >
             <div className="section-label">
               <span className="decorative-dot"></span>
-              <span>Get to know me</span>
+              <span>Get to know me</span>              <span className="decorative-dot"></span>
+
             </div>
 
             <h2 className="about-title">

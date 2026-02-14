@@ -70,7 +70,8 @@ const Portfolio = ({ setActiveNav }) => {
         >
           <div className="section-label">
             <span className="decorative-dot"></span>
-            <span>My Journey</span>
+            <span>My Journey</span>            <span className="decorative-dot"></span>
+
           </div>
 
           <h2 className="portfolio-title">

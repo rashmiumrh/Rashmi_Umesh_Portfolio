@@ -81,7 +81,7 @@ const currentYear = new Date().getFullYear();
           <path d="M14 2H6C4.89 2 4 2.9 4 4V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V8L14 2M18 20H6V4H13V9H18V20M12 19L8 15H10.5V12H13.5V15H16L12 19Z"/>
         </svg>
       ),
-      link: "https://drive.google.com/file/d/1rprmq0h5pqfO7IZ7eaVVp0nHr5-E3qsT/view",
+      link: "https://drive.google.com/file/d/1UYo0Fj8nCndPRvCyCM5aCCfPCa-ispii/view",
       color: "#d4af37"
     }
   ];
@@ -97,7 +97,8 @@ const currentYear = new Date().getFullYear();
         <div className={`contact-header ${isVisible ? "animate-fadeInUp" : ""}`}>
           <div className="section-label">
             <span className="decorative-dot"></span>
-            <span>Let's Connect</span>
+            <span>Let's Connect</span>            <span className="decorative-dot"></span>
+
           </div>
           
           <h2 className="contact-title">
@@ -112,9 +113,9 @@ const currentYear = new Date().getFullYear();
         </div>
 
         <div className="contact-content">
-          <div className={`contact-info-grid ${isVisible ? "animate-fadeInUp stagger-2" : ""}`}>
+          <div className={`contact-info-grid  ${isVisible ? "animate-fadeInUp stagger-2" : ""}`}>
             {contactInfo.map((info, index) => (
-              <div key={index} className="contact-info-card">
+              <div key={index} className="contact-info-card ">
                 <div className="contact-icon">{info.icon}</div>
                 <div className="contact-details">
                   <span className="contact-label">{info.label}</span>
