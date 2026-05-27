@@ -26,7 +26,29 @@ const Hero = ({ setActiveNav }) => {
       }
     };
   }, [setActiveNav]);
+  const getExperience = () => {
+    const startDate = new Date(2023, 5); // June 2023
+    const currentDate = new Date();
 
+    let totalMonths =
+      (currentDate.getFullYear() - startDate.getFullYear()) * 12 +
+      (currentDate.getMonth() - startDate.getMonth());
+
+    totalMonths -= 2; // subtract 2 months
+
+    const years = Math.floor(totalMonths / 12);
+    const months = totalMonths % 12;
+
+    if (years === 0) {
+      return `${months} months`;
+    }
+
+    if (months === 0) {
+      return `${years} year${years > 1 ? "s" : ""}`;
+    }
+
+    return `${years}.${months} years`;
+  };
   const scrollToAbout = () => {
     const aboutSection = document.getElementById("about");
     if (aboutSection) {
@@ -62,11 +84,15 @@ const Hero = ({ setActiveNav }) => {
           </div>
 
           <p
-            className={`hero-description ${isVisible ? "animate-fadeInUp stagger-2" : ""}`}
+            className={`hero-description ${
+              isVisible ? "animate-fadeInUp stagger-2" : ""
+            }`}
           >
             Crafting elegant, user-centric web experiences with React.js and
-            modern frontend technologies. Nearly 2.5 years of experience building
-            responsive, high-performance applications that users love.
+            modern frontend technologies. Nearly{" "}
+            <strong className="gradient-text">{getExperience()}</strong> of
+            experience building responsive, high-performance applications that
+            users love.
           </p>
 
           <div
@@ -100,12 +126,14 @@ const Hero = ({ setActiveNav }) => {
             className={`hero-stats ${isVisible ? "animate-fadeInUp stagger-4" : ""}`}
           >
             <div className="hero-stat">
-              <span className="stat-number gradient-text">2.5+</span>
-              <span className="stat-label">Years Experience</span>
+              <span className="stat-number gradient-text">
+                {getExperience()}
+              </span>
+              <span className="stat-label">of Experience</span>
             </div>
             <div className="stat-divider"></div>
             <div className="hero-stat">
-              <span className="stat-number gradient-text">6+</span>
+              <span className="stat-number gradient-text">7+</span>
               <span className="stat-label">Projects Delivered</span>
             </div>
             <div className="stat-divider"></div>

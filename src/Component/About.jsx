@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import portfolioImage from "../assets/portfolio.png";
+import portfolioImage from "../assets/portfolio.jpg";
 import "../CSS/About.css";
 
 const About = ({ setActiveNav }) => {
@@ -27,7 +27,29 @@ const About = ({ setActiveNav }) => {
       }
     };
   }, [setActiveNav]);
+  const getExperience = () => {
+    const startDate = new Date(2023, 5); // June 2023
+    const currentDate = new Date();
 
+    let totalMonths =
+      (currentDate.getFullYear() - startDate.getFullYear()) * 12 +
+      (currentDate.getMonth() - startDate.getMonth());
+
+    totalMonths -= 2; // subtract 2 months
+
+    const years = Math.floor(totalMonths / 12);
+    const months = totalMonths % 12;
+
+    if (years === 0) {
+      return `${months} months`;
+    }
+
+    if (months === 0) {
+      return `${years} year${years > 1 ? "s" : ""}`;
+    }
+
+    return `${years}.${months} years`;
+  };
   const skills = [
     "HTML/CSS",
     "JavaScript",
@@ -59,8 +81,8 @@ const About = ({ setActiveNav }) => {
           >
             <div className="section-label">
               <span className="decorative-dot"></span>
-              <span>Get to know me</span>              <span className="decorative-dot"></span>
-
+              <span>Get to know me</span>{" "}
+              <span className="decorative-dot"></span>
             </div>
 
             <h2 className="about-title">
@@ -74,10 +96,10 @@ const About = ({ setActiveNav }) => {
             <div className="about-description">
               <p>
                 I'm <strong>Rashmi Umesh</strong>, a dedicated Software Engineer
-                with nearly 2.5 years of experience crafting innovative,
-                user-centric web applications. My journey in software
-                development has been driven by a passion for creating seamless
-                digital experiences that users love.
+                with nearly <strong>{getExperience()}</strong> of experience
+                crafting innovative, user-centric web applications. My journey
+                in software development has been driven by a passion for
+                creating seamless digital experiences that users love.
               </p>
 
               <p>
