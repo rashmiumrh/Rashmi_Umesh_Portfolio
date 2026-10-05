@@ -177,9 +177,15 @@ a.contact-channel-link:hover .contact-channel-arrow {
   }
 }
 
+.contact-intro,
+.contact-channels {
+  min-width: 0;
+}
+
 @media (max-width: 900px) {
+  /* minmax(0, …) stops the long email address from widening the column past the screen */
   .contact-panel {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -194,6 +200,16 @@ a.contact-channel-link:hover .contact-channel-arrow {
   }
 
   .contact-channel:has(.contact-copy) .contact-channel-link {
-    padding-right: 5.75rem;
+    padding-right: 5.5rem;
+  }
+
+  /* Show the full address on small screens instead of truncating it */
+  .contact-channel-value {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-copy {
+    padding-inline: 0.65rem;
   }
 }
