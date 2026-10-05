@@ -1,6 +1,6 @@
 import React from "react";
 
-// Minimal stroke icon set (Lucide-style paths) — inline so there is no icon-font weight.
+// Minimal stroke icon set (Lucide-style paths) - inline so there is no icon-font weight.
 const paths = {
   arrowRight: (
     <>

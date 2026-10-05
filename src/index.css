@@ -1,5 +1,5 @@
 :root {
-  /* Color palette — elegant dark theme with gold & rose accents (unchanged brand) */
+  /* Color palette - elegant dark theme with gold & rose accents (unchanged brand) */
   --color-bg-primary: #0a0a0f;
   --color-bg-secondary: #13131a;
   --color-bg-card: #1a1a24;
@@ -430,7 +430,7 @@ main[tabindex="-1"]:focus {
     background-color var(--transition-medium);
 }
 
-/* Scroll reveal — animation (not transition) so hover transitions on cards stay intact */
+/* Scroll reveal - animation (not transition) so hover transitions on cards stay intact */
 .reveal:not(.is-revealed) {
   opacity: 0;
 }

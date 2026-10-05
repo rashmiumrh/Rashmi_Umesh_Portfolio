@@ -46,7 +46,7 @@ const Education = () => (
                   target="_blank"
                   rel="noopener noreferrer"
                   className="cert-card surface-card"
-                  aria-label={`${cert.title} certification by ${cert.issuer}, ${cert.year} — view credential (opens in a new tab)`}
+                  aria-label={`${cert.title} certification by ${cert.issuer}, ${cert.year} - view credential (opens in a new tab)`}
                 >
                   <span className="cert-card-top">
                     <span className="cert-issuer">{cert.issuer}</span>

@@ -15,7 +15,7 @@ const Experience = () => (
         eyebrow="Experience"
         title="Where I've"
         accent="built & shipped"
-        description="Delivering production front-ends for AI platforms, commerce and enterprise clients — with a focus on performance, quality and reliable delivery."
+        description="Delivering production front-ends for AI platforms, commerce and enterprise clients - with a focus on performance, quality and reliable delivery."
       />
 
       <ol className="timeline">

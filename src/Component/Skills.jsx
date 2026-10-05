@@ -29,7 +29,7 @@ const Skills = () => (
         eyebrow="Skills & tech stack"
         title="The toolkit behind"
         accent="the work"
-        description="Organised by how I use them day to day — from component architecture and state, through build tooling, to shipping on AWS."
+        description="Organised by how I use them day to day - from component architecture and state, through build tooling, to shipping on AWS."
       />
 
       <div className="skills-grid">

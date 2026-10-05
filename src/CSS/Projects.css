@@ -380,7 +380,7 @@
   margin-top: 0;
 }
 
-/* Footer — pinned to the card bottom so every card in a row lines up */
+/* Footer - pinned to the card bottom so every card in a row lines up */
 .project-footer {
   display: flex;
   flex-direction: column;

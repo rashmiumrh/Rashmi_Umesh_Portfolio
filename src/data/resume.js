@@ -4,7 +4,7 @@ import srihariPreview from "../assets/projects/srihari.webp";
 import satyaPreview from "../assets/projects/satya.webp";
 import medisysPreview from "../assets/projects/medisys.webp";
 
-// Single source of truth for portfolio content — mirrors the resume.
+// Single source of truth for portfolio content - mirrors the resume.
 // Text wrapped in **double asterisks** is rendered as highlighted emphasis.
 
 const ICON_CDN = "https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons";
@@ -28,7 +28,7 @@ export const profile = {
   resume:
     "https://drive.google.com/file/d/13-lOrQhSzmvDqk9l_2UDS4XddjgGb8hF/view",
   intro:
-    "building responsive, production-grade web applications with React.js, TypeScript, Redux and Tailwind CSS — from reusable component architecture and REST API integration through to deployment on AWS.",
+    "building responsive, production-grade web applications with React.js, TypeScript, Redux and Tailwind CSS - from reusable component architecture and REST API integration through to deployment on AWS.",
   heroStack: ["React.js", "TypeScript", "Redux", "Tailwind CSS", "AWS"],
 };
 
@@ -42,7 +42,7 @@ export const stats = [
 export const about = {
   paragraphs: [
     "I'm a Software Engineer specialising in front-end development, with hands-on experience building responsive, production-grade web applications using **React.js**, **TypeScript**, **JavaScript (ES6+)**, **Redux** and **Tailwind CSS**.",
-    "I've delivered **6+ live applications** across AI-driven platforms, e-commerce, healthcare and enterprise systems — including end-to-end deployment on AWS. Currently at **Novagito AI**, and previously at **ezAtlas**, I care about reusable component architecture, clean REST API integration and interfaces that feel fast on every device.",
+    "I've delivered **6+ live applications** across AI-driven platforms, e-commerce, healthcare and enterprise systems - including end-to-end deployment on AWS. Currently at **Novagito AI**, and previously at **ezAtlas**, I care about reusable component architecture, clean REST API integration and interfaces that feel fast on every device.",
   ],
   facts: [
     { icon: "mapPin", label: "Based in", value: "Bangalore, India" },
@@ -91,10 +91,10 @@ export const experience = [
     role: "Software Engineer",
     company: "Novagito AI Pvt Ltd",
     location: "Bangalore, India",
-    period: "Oct 2024 — Present",
+    period: "Oct 2024 - Present",
     current: true,
     summary:
-      "Building AI-driven platforms, booking systems and e-commerce products end-to-end — from UI to production hosting.",
+      "Building AI-driven platforms, booking systems and e-commerce products end-to-end - from UI to production hosting.",
     highlights: [
       "Delivered **6+ production React.js apps** end-to-end across AI platforms, booking systems and e-commerce.",
       "Integrated RESTful APIs, cutting data retrieval and render time by **~30%** via optimised state management and lazy loading.",
@@ -119,7 +119,7 @@ export const experience = [
     role: "Junior Software Engineer",
     company: "ezAtlas Pvt Ltd",
     location: "Bangalore, India",
-    period: "Jun 2023 — Jul 2024",
+    period: "Jun 2023 - Jul 2024",
     current: false,
     summary:
       "Built scalable enterprise dashboards and management systems for industry clients.",
@@ -409,7 +409,7 @@ export const education = {
   degree: "Bachelor of Engineering in Computer Science",
   institution: "MVJ College of Engineering",
   location: "Bangalore",
-  period: "2018 — 2022",
+  period: "2018 - 2022",
 };
 
 export const certifications = [

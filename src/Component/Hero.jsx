@@ -54,7 +54,7 @@ const Hero = () => {
           </h1>
 
           <p className="hero-role hero-enter" style={{ "--d": "180ms" }}>
-            <span className="hero-role-label">Software Engineer —</span>
+            <span className="hero-role-label">Software Engineer -</span>
             <RoleRotator roles={profile.roles} />
           </p>
 

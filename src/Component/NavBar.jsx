@@ -13,7 +13,7 @@ const NavBar = ({ activeSection }) => {
   const listRef = useRef(null);
   const toggleRef = useRef(null);
 
-  // Scroll state: background and reading progress — one rAF-throttled listener.
+  // Scroll state: background and reading progress - one rAF-throttled listener.
   useEffect(() => {
     let ticking = false;
 
@@ -94,7 +94,7 @@ const NavBar = ({ activeSection }) => {
       <div className="navbar-progress" ref={progressRef} aria-hidden="true"></div>
 
       <nav className="navbar-shell" aria-label="Primary">
-        <a href="#hero" className="navbar-logo" onClick={closeMenu} aria-label={`${profile.name} — back to top`}>
+        <a href="#hero" className="navbar-logo" onClick={closeMenu} aria-label={`${profile.name} - back to top`}>
           <span className="navbar-logo-mark" aria-hidden="true">
             RU
           </span>

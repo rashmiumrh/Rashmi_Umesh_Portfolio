@@ -45,7 +45,7 @@ const Contact = () => {
             </h2>
             <p className="contact-text">
               I'm always open to discussing new projects, front-end roles and opportunities to be part of your
-              vision. The quickest way to reach me is by email — I'll get back to you soon.
+              vision. The quickest way to reach me is by email - I'll get back to you soon.
             </p>
 
             <div className="contact-actions">

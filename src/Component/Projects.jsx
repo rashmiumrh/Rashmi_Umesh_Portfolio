@@ -173,7 +173,7 @@ const Projects = () => {
             eyebrow="Selected work"
             title="Projects I've"
             accent="delivered"
-            description="Production applications across AI, travel, healthcare, commerce and enterprise — built with React.js and shipped to real users."
+            description="Production applications across AI, travel, healthcare, commerce and enterprise - built with React.js and shipped to real users."
           />
 
           <Reveal className="projects-filter" role="group" aria-label="Filter projects by company">
