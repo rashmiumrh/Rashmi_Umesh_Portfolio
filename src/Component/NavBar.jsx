@@ -1,182 +1,191 @@
-// import React, { useState } from "react";
-
-// const NavBar = ({
-//   scrollToHero,
-//   scrollToAbout,
-//   scrollToPortfolio,
-//   scrollToContact,
-//   activeNav,
-// }) => {
-//   const [isOpen, setIsOpen] = useState(false);
-
-//   const toggleMenu = () => {
-//     setIsOpen(!isOpen);
-//   };
-
-//   const handleScroll = (scrollFn, section) => {
-//     scrollFn();
-//     setIsOpen(false);
-//   };
-
-//   return (
-//     <>
-//       <style>
-//         {`
-//           .text-gradient-pink-purple {
-//             background: linear-gradient(to right, #ec4899, #7e22ce);
-//             -webkit-background-clip: text;
-//             background-clip: text;
-//             color: transparent;
-//             text-shadow: 2px 2px 4px rgba(75, 0, 130, 0.3);
-//           }
-//           .nav-link {
-//             transition: color 0.3s ease;
-//           }
-//           .nav-link:hover {
-//             color: #93c5fd;
-//           }
-//           .nav-link.active {
-//             color: #ec4899;
-//             font-weight: bold;
-//           }
-//           @media (max-width: 640px) {
-//             .text-2xl { font-size: 1.5rem; }
-//             .text-lg { font-size: 1rem; }
-//             .p-4 { padding: 1rem; }
-//           }
-//         `}
-//       </style>
-//       <nav className="fixed top-0 left-0 w-full bg-gray-900 text-white shadow-md z-50">
-//         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-//           <div className="text-2xl font-bold">
-//             <button
-//               onClick={() => handleScroll(scrollToHero, "Home")}
-//               className="text-gradient-pink-purple"
-//             >
-//               Rashmi Umesh
-//             </button>
-//           </div>
-
-//           <button
-//             className="sm:hidden flex flex-col gap-1.5"
-//             onClick={toggleMenu}
-//             aria-label="Toggle navigation menu"
-//           >
-//             <span
-//               className={`w-6 h-0.5 bg-white transition-transform duration-300 ${isOpen ? "rotate-45 translate-y-2" : ""}`}
-//             ></span>
-//             <span
-//               className={`w-6 h-0.5 bg-white transition-opacity duration-300 ${isOpen ? "opacity-0" : ""}`}
-//             ></span>
-//             <span
-//               className={`w-6 h-0.5 bg-white transition-transform duration-300 ${isOpen ? "-rotate-45 -translate-y-2" : ""}`}
-//             ></span>
-//           </button>
-
-//           <div
-//             className={`${isOpen ? "flex" : "hidden"} sm:flex flex-col sm:flex-row absolute sm:static top-12 left-0 w-full sm:w-auto bg-gray-900 sm:bg-transparent p-4 sm:p-0 text-center sm:text-left gap-4 sm:gap-8 text-lg`}
-//           >
-//             {[
-//               { name: "Home", scrollFn: scrollToHero },
-//               { name: "About", scrollFn: scrollToAbout },
-//               { name: "Portfolio", scrollFn: scrollToPortfolio },
-//               { name: "Contact", scrollFn: scrollToContact },
-//             ].map((item) => (
-//               <button
-//                 key={item.name}
-//                 className={`nav-link py-2 sm:py-0 ${activeNav === item.name ? "active" : ""}`}
-//                 onClick={() => handleScroll(item.scrollFn, item.name)}
-//               >
-//                 {item.name}
-//               </button>
-//             ))}
-//           </div>
-//         </div>
-//       </nav>
-//     </>
-//   );
-// };
-
-// export default NavBar;
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import Icon from "./Icon";
+import { navItems, profile } from "../data/resume";
 import "../CSS/NavBar.css";
 
-const NavBar = ({ activeNav, setActiveNav }) => {
+const NavBar = ({ activeSection }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [indicator, setIndicator] = useState({ left: 0, width: 0, visible: false });
 
+  const progressRef = useRef(null);
+  const linksRef = useRef({});
+  const listRef = useRef(null);
+  const toggleRef = useRef(null);
+
+  // Scroll state: background and reading progress — one rAF-throttled listener.
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+    let ticking = false;
+
+    const update = () => {
+      const y = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+
+      setIsScrolled(y > 24);
+      if (progressRef.current) {
+        progressRef.current.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+      }
+      ticking = false;
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const scrollToSection = (sectionId, navName) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      const yOffset = -80;
-      const y =
-        section.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-      setActiveNav(navName);
-      setIsMobileMenuOpen(false);
-    }
-  };
+  // Slide the active pill under the current section's link.
+  useLayoutEffect(() => {
+    const measure = () => {
+      const link = linksRef.current[activeSection];
+      if (!link || !listRef.current) {
+        setIndicator((prev) => ({ ...prev, visible: false }));
+        return;
+      }
+      setIndicator({ left: link.offsetLeft, width: link.offsetWidth, visible: true });
+    };
 
-  const navItems = [
-    { name: "Home", id: "hero" },
-    { name: "About", id: "about" },
-    { name: "Portfolio", id: "portfolio" },
-    { name: "Contact", id: "contact" },
-  ];
+    measure();
+    window.addEventListener("resize", measure);
+    document.fonts?.ready.then(measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [activeSection]);
+
+  // Mobile menu: lock page scroll and close on Escape.
+  useEffect(() => {
+    document.body.classList.toggle("no-scroll", isMenuOpen);
+    if (!isMenuOpen) return undefined;
+
+    const onKey = (event) => {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+        toggleRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isMenuOpen]);
+
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 900px)");
+    const onChange = (event) => event.matches && setIsMenuOpen(false);
+    desktop.addEventListener("change", onChange);
+    return () => desktop.removeEventListener("change", onChange);
+  }, []);
+
+  const closeMenu = () => setIsMenuOpen(false);
+
+  const navClass = [
+    "navbar",
+    isScrolled && "navbar--scrolled",
+    isMenuOpen && "navbar--open",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <nav className={`navbar ${isScrolled ? "navbar-scrolled" : ""}`}>
-      <div className="navbar-container">
-        <button
-          className="navbar-logo"
-          onClick={() => scrollToSection("hero", "Home")}
-        >
-          {" "}
-          <span className="logo-dot"></span>
-          <span className="logo-text">Rashmi</span>
-          <span className="logo-dot"></span>
-        </button>
+    <header className={navClass}>
+      <div className="navbar-progress" ref={progressRef} aria-hidden="true"></div>
 
-        <div
-          className={`navbar-menu ${isMobileMenuOpen ? "navbar-menu-open" : ""}`}
-        >
-          {navItems.map((item, index) => (
-            <button
-              key={item.name}
-              className={`navbar-link ${activeNav === item.name ? "navbar-link-active" : ""}`}
-              onClick={() => scrollToSection(item.id, item.name)}
-            >
-              {item.name}
-            </button>
+      <nav className="navbar-shell" aria-label="Primary">
+        <a href="#hero" className="navbar-logo" onClick={closeMenu} aria-label={`${profile.name} — back to top`}>
+          <span className="navbar-logo-mark" aria-hidden="true">
+            RU
+          </span>
+          <span className="navbar-logo-text">
+            {profile.shortName}
+            <span className="navbar-logo-dot" aria-hidden="true"></span>
+          </span>
+        </a>
+
+        <ul className="navbar-links" ref={listRef}>
+          <li
+            className="navbar-indicator"
+            aria-hidden="true"
+            style={{
+              transform: `translateX(${indicator.left}px)`,
+              width: `${indicator.width}px`,
+              opacity: indicator.visible ? 1 : 0,
+            }}
+          ></li>
+          {navItems.map((item) => (
+            <li key={item.id}>
+              <a
+                href={`#${item.id}`}
+                ref={(node) => (linksRef.current[item.id] = node)}
+                className={`navbar-link ${activeSection === item.id ? "is-active" : ""}`}
+                aria-current={activeSection === item.id ? "true" : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
 
-        <button
-          className="navbar-hamburger"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          <span
-            className={`hamburger-line ${isMobileMenuOpen ? "hamburger-line-1" : ""}`}
-          ></span>
-          <span
-            className={`hamburger-line ${isMobileMenuOpen ? "hamburger-line-2" : ""}`}
-          ></span>
-          <span
-            className={`hamburger-line ${isMobileMenuOpen ? "hamburger-line-3" : ""}`}
-          ></span>
-        </button>
+        <div className="navbar-actions">
+          <a
+            href={profile.resume}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-outline btn-sm navbar-resume"
+          >
+            Resume
+            <Icon name="arrowUpRight" size={15} className="btn-icon-lift" />
+          </a>
+
+          <button
+            ref={toggleRef}
+            type="button"
+            className="navbar-toggle"
+            onClick={() => setIsMenuOpen((open) => !open)}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          >
+            <span className="navbar-toggle-line"></span>
+            <span className="navbar-toggle-line"></span>
+          </button>
+        </div>
+      </nav>
+
+      <div
+        id="mobile-menu"
+        className={`mobile-menu ${isMenuOpen ? "is-open" : ""}`}
+        aria-hidden={!isMenuOpen}
+        inert={!isMenuOpen}
+      >
+        <ul className="mobile-menu-links">
+          {navItems.map((item, index) => (
+            <li key={item.id} style={{ "--i": index }}>
+              <a
+                href={`#${item.id}`}
+                onClick={closeMenu}
+                className={`mobile-menu-link ${activeSection === item.id ? "is-active" : ""}`}
+              >
+                <span className="mobile-menu-index">0{index + 1}</span>
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mobile-menu-footer" style={{ "--i": navItems.length }}>
+          <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+            View Resume
+            <Icon name="arrowUpRight" size={16} className="btn-icon-lift" />
+          </a>
+          <a href={`mailto:${profile.email}`} className="mobile-menu-email">
+            {profile.email}
+          </a>
+        </div>
       </div>
-    </nav>
+    </header>
   );
 };
 

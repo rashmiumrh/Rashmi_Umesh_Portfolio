@@ -1,160 +1,85 @@
 import React from "react";
-import postman from "../assets/postman.png";
-import swagger from "../assets/swagger.png";
-import tailwind from "../assets/tailwind.png";
-import "../CSS/Portfoliosections.css";
+import Reveal from "./Reveal";
+import Icon from "./Icon";
+import SectionHeader from "./SectionHeader";
+import { professionalSkills, skillGroups } from "../data/resume";
+import "../CSS/Skills.css";
 
-const Skills = ({ isVisible }) => {
-  const skillCategories = [
-    {
-      category: "Frontend Development",
-      skills: [
-        {
-          name: "React.js",
-          icon: "https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg",
-        },
-        {
-          name: "Redux",
-          icon: "https://raw.githubusercontent.com/devicons/devicon/master/icons/redux/redux-original.svg",
-        },
-        {
-          name: "JavaScript",
-          icon: "https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg",
-        },
-        {
-          name: "TypeScript",
-          icon: "https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg",
-        },
-        {
-          name: "HTML5",
-          icon: "https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg",
-        },
-        {
-          name: "CSS3",
-          icon: "https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg",
-        },
-      ],
-    },
-    {
-      category: "Styling Frameworks",
-      skills: [
-        { name: "Tailwind CSS", icon: tailwind, isLocal: true },
-        {
-          name: "Bootstrap",
-          icon: "https://raw.githubusercontent.com/devicons/devicon/master/icons/bootstrap/bootstrap-original.svg",
-        },
-      ],
-    },
-    {
-      category: "API Testing & Integration",
-      skills: [
-        { name: "Postman", icon: postman, isLocal: true },
-        { name: "Swagger", icon: swagger, isLocal: true },
-      ],
-    },
-    {
-      category: "Development Tools",
-      skills: [
-        {
-          name: "Git",
-          icon: "https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg",
-        },
-        {
-          name: "GitLab",
-          icon: "https://raw.githubusercontent.com/devicons/devicon/master/icons/gitlab/gitlab-original.svg",
-        },
-        {
-          name: "Azure DevOps",
-          icon: "https://raw.githubusercontent.com/devicons/devicon/master/icons/azure/azure-original.svg",
-        },
-        {
-          name: "VS Code",
-          icon: "https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg",
-        },
-      ],
-    },
-  ];
+const WIDE_GROUPS = new Set(["Frontend", "Cloud & Deployment", "Workflow & Version Control"]);
 
-  const softSkills = [
-    "Team Collaboration",
-    "Agile Development",
-    "Problem Solving",
-    "Communication",
-    "Code Review",
-    "Critical Thinking",
-    "Time Management",
-    "Adaptability",
-    "Attention to Detail",
-  ];
+const SkillLogo = ({ src }) =>
+  src ? (
+    <img
+      src={src}
+      alt=""
+      width="20"
+      height="20"
+      loading="lazy"
+      decoding="async"
+      onError={(event) => event.currentTarget.parentElement.classList.add("is-fallback")}
+    />
+  ) : null;
 
-  return (
-    <div className={`section-content ${isVisible ? "animate-fadeInUp" : ""}`}>
-      <div className="section-intro">
-        <h3 className="section-title">Technical Expertise</h3>
-        <p className="section-subtitle">
-          Modern technologies and tools I work with daily
-        </p>
-      </div>
+const Skills = () => (
+  <section id="skills" className="section section--alt" aria-labelledby="skills-title">
+    <div className="container">
+      <SectionHeader
+        id="skills-title"
+        index="04"
+        eyebrow="Skills & tech stack"
+        title="The toolkit behind"
+        accent="the work"
+        description="Organised by how I use them day to day — from component architecture and state, through build tooling, to shipping on AWS."
+      />
 
-      <div className="skills-categories">
-        {skillCategories.map((category, catIndex) => (
-          <div key={catIndex} className="skill-category">
-            <h4 className="category-title">
-              <span className="decorative-dot"></span>
-              {category.category}               <span className="decorative-dot"></span>
+      <div className="skills-grid">
+        {skillGroups.map((group, index) => (
+          <Reveal
+            key={group.title}
+            className={`skill-card surface-card ${WIDE_GROUPS.has(group.title) ? "skill-card--wide" : ""}`}
+            delay={(index % 4) * 70}
+          >
+            <header className="skill-card-header">
+              <span className="skill-card-icon" aria-hidden="true">
+                <Icon name={group.icon} size={18} />
+              </span>
+              <h3 className="skill-card-title">{group.title}</h3>
+              <span className="skill-card-count">{group.skills.length}</span>
+            </header>
 
-            </h4>
-
-            <div className="skills-showcase">
-              {category.skills.map((skill, skillIndex) => (
-                <div key={skillIndex} className="skill-item" title={skill.name}>
-                  <div className="skill-icon-wrapper">
-                    <img
-                      src={skill.icon}
-                      alt={`${skill.name} logo`}
-                      className="skill-icon"
-                    />
-                  </div>
-                  <span className="skill-name">{skill.name}</span>
-                </div>
+            <ul className="skill-list">
+              {group.skills.map((skill) => (
+                <li key={skill.name} className="skill-item">
+                  <span className={`skill-item-logo ${skill.logo ? "" : "is-fallback"}`} aria-hidden="true">
+                    <SkillLogo src={skill.logo} />
+                  </span>
+                  {skill.name}
+                </li>
               ))}
-            </div>
-          </div>
+            </ul>
+          </Reveal>
         ))}
 
-        <div className="skill-category">
-          <h4 className="category-title">
-            <span className="decorative-dot"></span>
-            Professional Skills             <span className="decorative-dot"></span>
+        <Reveal className="skill-card skill-card--soft surface-card" delay={210}>
+          <header className="skill-card-header">
+            <span className="skill-card-icon skill-card-icon--rose" aria-hidden="true">
+              <Icon name="users" size={18} />
+            </span>
+            <h3 className="skill-card-title">Ways of Working</h3>
+          </header>
 
-          </h4>
-
-          <div className="soft-skills-grid">
-            {softSkills.map((skill, index) => (
-              <div key={index} className="soft-skill-item">
-                <svg
-                  className="check-icon"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    d="M20 6L9 17L4 12"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+          <ul className="soft-skill-list">
+            {professionalSkills.map((skill) => (
+              <li key={skill}>
+                <Icon name="check" size={14} strokeWidth={2.25} />
                 {skill}
-              </div>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </Reveal>
       </div>
     </div>
-  );
-};
+  </section>
+);
 
 export default Skills;

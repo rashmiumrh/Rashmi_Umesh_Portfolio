@@ -1,166 +1,147 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
+import portfolioImage from "../assets/portfolio.jpg";
+import Icon from "./Icon";
+import Counter from "./Counter";
+import { profile, stats } from "../data/resume";
+import { getExperienceYears } from "../utils/experience";
 import "../CSS/Hero.css";
 
-const Hero = ({ setActiveNav }) => {
-  const heroRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+const RoleRotator = ({ roles }) => {
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting);
-        if (entry.isIntersecting) {
-          setActiveNav("Home");
-        }
-      },
-      { threshold: 0.5 },
-    );
-
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
-    }
-
-    return () => {
-      if (heroRef.current) {
-        observer.unobserve(heroRef.current);
-      }
-    };
-  }, [setActiveNav]);
-  const getExperience = () => {
-    const startDate = new Date(2023, 5); // June 2023
-    const currentDate = new Date();
-
-    let totalMonths =
-      (currentDate.getFullYear() - startDate.getFullYear()) * 12 +
-      (currentDate.getMonth() - startDate.getMonth());
-
-    totalMonths -= 2; // subtract 2 months
-
-    const years = Math.floor(totalMonths / 12);
-    const months = totalMonths % 12;
-
-    if (years === 0) {
-      return `${months} months`;
-    }
-
-    if (months === 0) {
-      return `${years} year${years > 1 ? "s" : ""}`;
-    }
-
-    return `${years}.${months} years`;
-  };
-  const scrollToAbout = () => {
-    const aboutSection = document.getElementById("about");
-    if (aboutSection) {
-      const yOffset = -80;
-      const y =
-        aboutSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
-  };
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    const timer = setInterval(() => setIndex((i) => (i + 1) % roles.length), 2800);
+    return () => clearInterval(timer);
+  }, [roles.length]);
 
   return (
-    <section id="hero" ref={heroRef} className="hero-section">
-      <div className="hero-background">
-        <div className="hero-gradient-orb hero-orb-1"></div>
-        <div className="hero-gradient-orb hero-orb-2"></div>
-        <div className="hero-gradient-orb hero-orb-3"></div>
+    <span className="role-rotator">
+      <span className="sr-only">{roles.join(", ")}</span>
+      <span className="role-rotator-track" aria-hidden="true">
+        {roles.map((role, i) => (
+          <span key={role} className={`role-rotator-item ${i === index ? "is-active" : ""}`}>
+            {role}
+          </span>
+        ))}
+      </span>
+    </span>
+  );
+};
+
+const Hero = () => {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const years = getExperienceYears();
+
+  return (
+    <section id="hero" className="hero" aria-labelledby="hero-title">
+      <div className="hero-backdrop" aria-hidden="true">
+        <div className="hero-orb hero-orb--gold"></div>
+        <div className="hero-orb hero-orb--rose"></div>
+        <div className="hero-grid"></div>
       </div>
 
-      <div className="hero-content ">
-        <div
-          className={`hero-text mt-14 md:mt-4 ${isVisible ? "animate-fadeInUp" : ""}`}
-        >
-          <span className="hero-greeting">Hello, I'm</span>
-
-          <h1 className="hero-title">
-            <span className="hero-name gradient-text">Rashmi Umesh</span>
-          </h1>
-
-          <div className="hero-subtitle-wrapper">
-            <span className="decorative-line"></span>
-            <h2 className="hero-subtitle">Software Engineer</h2>
-            <span className="decorative-line"></span>
-          </div>
-
-          <p
-            className={`hero-description ${
-              isVisible ? "animate-fadeInUp stagger-2" : ""
-            }`}
-          >
-            Crafting elegant, user-centric web experiences with React.js and
-            modern frontend technologies. Nearly{" "}
-            <strong className="gradient-text">{getExperience()}</strong> of
-            experience building responsive, high-performance applications that
-            users love.
+      <div className="container hero-layout">
+        <div className="hero-copy">
+          <p className="hero-kicker hero-enter" style={{ "--d": "0ms" }}>
+            <span className="hero-kicker-dot" aria-hidden="true"></span>
+            {profile.title} · {profile.location}
           </p>
 
-          <div
-            className={`hero-cta ${isVisible ? "animate-fadeInUp stagger-3" : ""}`}
-          >
-            <button className="btn btn-primary" onClick={scrollToAbout}>
-              <span>Explore My Work </span>
-              {/* <svg
-      className="btn-icon"
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
-      fill="none"
-    >
-      <path
-        d="M7.5 15L12.5 10L7.5 5"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg> */}
-            </button>
+          <h1 id="hero-title" className="hero-title hero-enter" style={{ "--d": "90ms" }}>
+            <span className="hero-greeting">Hello, I'm</span>
+            <span className="gradient-text">{profile.name}</span>
+          </h1>
 
-            <a href="#contact" className="btn btn-outline">
-              Get In Touch
+          <p className="hero-role hero-enter" style={{ "--d": "180ms" }}>
+            <span className="hero-role-label">Software Engineer —</span>
+            <RoleRotator roles={profile.roles} />
+          </p>
+
+          <p className="hero-intro hero-enter" style={{ "--d": "270ms" }}>
+            Software Engineer with {years}+ years of experience {profile.intro}
+          </p>
+
+          <div className="hero-actions hero-enter" style={{ "--d": "360ms" }}>
+            <a href="#projects" className="btn btn-primary">
+              View Projects
+              <Icon name="arrowRight" size={17} className="btn-icon-shift" />
+            </a>
+            <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+              <Icon name="fileText" size={17} />
+              View Resume
+            </a>
+            <a href="#contact" className="btn btn-ghost">
+              Contact Me
+              <Icon name="arrowRight" size={16} className="btn-icon-shift" />
             </a>
           </div>
 
-          <div
-            className={`hero-stats ${isVisible ? "animate-fadeInUp stagger-4" : ""}`}
-          >
-            <div className="hero-stat">
-              <span className="stat-number gradient-text">
-                {getExperience()}
-              </span>
-              <span className="stat-label">of Experience</span>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="hero-stat">
-              <span className="stat-number gradient-text">7+</span>
-              <span className="stat-label">Projects Delivered</span>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="hero-stat">
-              <span className="stat-number gradient-text">100%</span>
-              <span className="stat-label">Client Satisfaction</span>
-            </div>
-          </div>
+          <ul className="hero-stack hero-enter" style={{ "--d": "450ms" }} aria-label="Primary stack">
+            {profile.heroStack.map((tech) => (
+              <li key={tech}>{tech}</li>
+            ))}
+          </ul>
         </div>
 
-        <div
-          className={`hero-scroll-indicator ${isVisible ? "animate-fadeInUp stagger-5" : ""}`}
-        >
-          <span className="scroll-text">Scroll to explore</span>
-          <div className="scroll-arrow">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 5V19M12 19L5 12M12 19L19 12"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+        <div className="hero-visual hero-enter" style={{ "--d": "200ms" }}>
+          <div className="hero-portrait">
+            <div className="hero-portrait-ring" aria-hidden="true"></div>
+            <div className={`hero-portrait-frame ${imageLoaded ? "is-loaded" : ""}`}>
+              <img
+                src={portfolioImage}
+                alt="Portrait of Rashmi Umesh"
+                width="480"
+                height="600"
+                fetchPriority="high"
+                decoding="async"
+                onLoad={() => setImageLoaded(true)}
               />
-            </svg>
+            </div>
+
+            <div className="hero-badge hero-badge--top">
+              <span className="hero-badge-icon">
+                <Icon name="briefcase" size={16} />
+              </span>
+              <span>
+                <span className="hero-badge-label">Currently at</span>
+                <strong>Novagito AI</strong>
+              </span>
+            </div>
+
+            <div className="hero-badge hero-badge--bottom">
+              <span className="hero-badge-icon">
+                <Icon name="code" size={16} />
+              </span>
+              <span>
+                <span className="hero-badge-label">Specialising in</span>
+                <strong>React.js &amp; UI</strong>
+              </span>
+            </div>
           </div>
         </div>
       </div>
+
+      <div className="container">
+        <dl className="hero-stats hero-enter" style={{ "--d": "520ms" }}>
+          {stats.map((stat) => (
+            <div className="hero-stat" key={stat.label}>
+              <dt className="hero-stat-label">{stat.label}</dt>
+              <dd className="hero-stat-value">
+                <Counter
+                  value={stat.value === "experience" ? years : stat.value}
+                  decimals={stat.decimals}
+                  suffix={stat.suffix}
+                />
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <a href="#about" className="hero-scroll" aria-label="Scroll to About section">
+        <span className="hero-scroll-line" aria-hidden="true"></span>
+      </a>
     </section>
   );
 };

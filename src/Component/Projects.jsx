@@ -1,203 +1,218 @@
+import React, { useState } from "react";
+import Reveal from "./Reveal";
+import Icon from "./Icon";
+import SectionHeader from "./SectionHeader";
+import { projectFilters, projects } from "../data/resume";
+import "../CSS/Projects.css";
 
-import React from "react";
-import "../CSS/Portfoliosections.css";
+const hostname = (url) => new URL(url).hostname.replace(/^www\./, "");
 
-const Projects = ({ isVisible }) => {
-  const projectGroups = [
-    {
-      company: "Novagito AI Pvt Ltd",
-      projects: [
-        {
-          name: "NG360 CXaaS Platform",
-          description:
-            "Comprehensive customer experience platform with multiple AI-driven modules",
-          highlights: [
-            "Developed responsive interfaces for N-Cogito and N-Desk, supporting AI-driven customer solutions",
-            "Built analytics dashboards with React.js for real-time insights in N-IQ, improving decision-making",
-            "Streamlined workflows with support ticket views and automation dashboards",
-          ],
-          tags: ["React.js", "Tailwind CSS", "RESTful APIs", "Analytics"],
-        },
-        {
-          name: "Chatbot Product Development",
-          description:
-            "AI-powered chatbot interface for enhanced customer support",
-          highlights: [
-            "Designed AI-driven chatbot interfaces with React.js, boosting customer support efficiency",
-            "Integrated front-end with backend APIs for seamless functionality and streamlined deployment",
-            "Collaborated with teams to gather requirements, enhancing user interaction quality",
-          ],
-          tags: ["React.js", "AI Integration", "API Integration"],
-        },
-        {
-          name: "Andaman Isle - Ferry Booking Platform",
-          description:
-            "Complete travel booking platform for Andaman & Nicobar Islands",
-          highlights: [
-            "Built comprehensive ferry ticket booking system with React.js and Context API for state management",
-            "Developed tourist information portal showcasing nearby attractions and adventure activities",
-            "Created admin panel for managing bookings, ferry schedules, and tourist destinations",
-            "Integrated RESTful APIs for real-time availability and booking confirmations",
-          ],
-          tags: [
-            "React.js",
-            "Context API",
-            "RESTful APIs",
-            "Admin Panel",
-            "Booking System",
-          ],
-        },
-        {
-          name: "Tekka Centre - Cultural Marketplace Platform",
-          description:
-            "Digital platform for Singapore's iconic Little India marketplace",
-          highlights: [
-            "Developed responsive website showcasing Tekka Centre's diverse ethnic marketplace and cultural heritage",
-            "Implemented features for hawker centre food stalls, wet market vendors, and specialty shops",
-            "Built admin panel for managing vendor listings, product categories, and marketplace information",
-            "Integrated location services highlighting MRT connectivity and nearby amenities",
-          ],
-          tags: [
-            "React.js",
-            "RESTful APIs",
-            "Admin Panel",
-            "Cultural Heritage",
-          ],
-        },
-        {
-          name: "Srihari Medicals - Online Pharmacy",
-          description:
-            "E-commerce platform for pharmaceutical products and healthcare",
-          highlights: [
-            "Built responsive front-end with React.js for browsing and purchasing medicines",
-            "Developed comprehensive admin panel for inventory management, order processing, and customer management",
-            "Implemented secure checkout flows and prescription upload functionality",
-            "Integrated RESTful APIs for real-time stock updates and order tracking",
-          ],
-          tags: [
-            "React.js",
-            "E-Commerce",
-            "Admin Panel",
-            "Healthcare",
-            "API Integration",
-          ],
-        },
-        {
-          name: "Satya Foods - Pickles & Products Store",
-          description:
-            "E-commerce platform for traditional pickles and food products",
-          highlights: [
-            "Developed responsive storefront with React.js for product browsing and online ordering",
-            "Built admin panel for product management, inventory tracking, and order fulfillment",
-            "Optimized performance for seamless cross-device shopping experiences",
-          ],
-          tags: [
-            "React.js",
-            "E-Commerce",
-            "Admin Panel",
-            "Product Management",
-          ],
-        },
-      ],
-    },
-    {
-      company: "ezAtlas Pvt Ltd",
-      projects: [
-        {
-          name: "Asset Management System - Pioneer Toyota",
-          description: "Comprehensive asset tracking and management solution",
-          highlights: [
-            "Developed React.js-based front-end for tracking company assets like vehicles, tools, and machinery",
-            "Implemented asset lifecycle management, real-time tracking, and maintenance scheduling",
-            "Designed responsive interface accessible across desktops and mobile devices",
-          ],
-          tags: [
-            "React.js",
-            "Asset Tracking",
-            "Real-time Data",
-            "Mobile Responsive",
-          ],
-        },
-        {
-          name: "Distributor Management System - Melt and Mellow",
-          description:
-            "Distribution and inventory management for ice cream products",
-          highlights: [
-            "Built responsive front-end for managing inventory and distribution channels",
-            "Streamlined operations with modules for inventory control, order tracking, and performance reporting",
-            "Integrated alert notifications and real-time updates for enhanced communication",
-          ],
-          tags: [
-            "React.js",
-            "Inventory Management",
-            "Real-time Updates",
-            "Reporting",
-          ],
-        },
-      ],
-    },
-  ];
+// Cursor-follow spotlight; written to CSS vars so React never re-renders on move.
+const trackPointer = (event) => {
+  const card = event.currentTarget;
+  const rect = card.getBoundingClientRect();
+  card.style.setProperty("--mx", `${event.clientX - rect.left}px`);
+  card.style.setProperty("--my", `${event.clientY - rect.top}px`);
+};
+
+// Live projects show a capture of the site's homepage; others fall back to an icon panel.
+const ProjectVisual = ({ project }) => {
+  const [loaded, setLoaded] = useState(false);
+
+  const frame = (
+    <>
+      <div className="project-visual-bar">
+        <span className="project-visual-dots">
+          <i></i>
+          <i></i>
+          <i></i>
+        </span>
+        <span className="project-visual-url">
+          {project.link ? (
+            <>
+              <Icon name="lock" size={11} />
+              {hostname(project.link)}
+            </>
+          ) : (
+            `${project.companyName} · ${project.domain}`
+          )}
+        </span>
+      </div>
+
+      {project.preview ? (
+        <div className={`project-visual-shot ${loaded ? "is-loaded" : ""}`}>
+          <img
+            src={project.preview}
+            alt=""
+            width="1280"
+            height="800"
+            loading="lazy"
+            decoding="async"
+            onLoad={() => setLoaded(true)}
+          />
+          <span className="project-visual-overlay">
+            Visit live site
+            <Icon name="arrowUpRight" size={15} />
+          </span>
+        </div>
+      ) : (
+        <div className="project-visual-body">
+          <span className="project-visual-icon">
+            <Icon name={project.icon} size={30} strokeWidth={1.5} />
+          </span>
+          {project.modules && (
+            <span className="project-visual-modules">
+              {project.modules.map((module) => (
+                <span key={module}>{module}</span>
+              ))}
+            </span>
+          )}
+        </div>
+      )}
+    </>
+  );
+
+  // The preview is a mouse shortcut to the site; the footer button is the accessible link.
+  return project.link && project.preview ? (
+    <a
+      href={project.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="project-visual project-visual--live"
+      tabIndex={-1}
+      aria-hidden="true"
+    >
+      {frame}
+    </a>
+  ) : (
+    <div className="project-visual" aria-hidden="true">
+      {frame}
+    </div>
+  );
+};
+
+const ProjectCard = ({ project, featured }) => (
+  <article
+    className={`project-card surface-card ${featured ? "project-card--featured" : ""}`}
+    onPointerMove={trackPointer}
+  >
+    <ProjectVisual project={project} />
+
+    <div className="project-body">
+      <div className="project-meta">
+        <span className="chip chip--accent">{project.domain}</span>
+        <span className="project-company">{project.companyName}</span>
+      </div>
+
+      <h3 className="project-name">{project.name}</h3>
+      <p className="project-tagline">{project.tagline}</p>
+      <p className="project-description">{project.description}</p>
+
+      <div className="project-contrib">
+        <h4 className="project-contrib-title">My contribution</h4>
+        <ul>
+          {project.contributions.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </div>
+
+      <footer className="project-footer">
+        <ul className="project-tech" aria-label="Technologies used">
+          {project.tech.map((tech) => (
+            <li key={tech} className="chip">
+              {tech}
+            </li>
+          ))}
+        </ul>
+
+        <div className="project-actions">
+          {project.link ? (
+            <>
+              <span className="project-status">
+                <span className="project-status-dot" aria-hidden="true"></span>
+                Live
+              </span>
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-cta"
+                aria-label={`View project: ${project.name} (opens in a new tab)`}
+              >
+                View Project
+                <Icon name="arrowUpRight" size={16} />
+              </a>
+            </>
+          ) : (
+            <>
+              <span className="project-status project-status--muted">Built at {project.companyName}</span>
+              <span className="project-private">
+                <Icon name="lock" size={14} />
+                No public link
+              </span>
+            </>
+          )}
+        </div>
+      </footer>
+    </div>
+  </article>
+);
+
+const Projects = () => {
+  const [filter, setFilter] = useState("all");
+  const visible = projects.filter((p) => filter === "all" || p.company === filter);
 
   return (
-    <div className={`section-content ${isVisible ? "animate-fadeInUp" : ""}`}>
-      <div className="section-intro">
-        <h3 className="section-title">Featured Projects</h3>
-        <p className="section-subtitle">
-          Impactful solutions delivered across different domains
+    <section id="projects" className="section" aria-labelledby="projects-title">
+      <div className="container">
+        <div className="projects-head">
+          <SectionHeader
+            id="projects-title"
+            index="03"
+            eyebrow="Selected work"
+            title="Projects I've"
+            accent="delivered"
+            description="Production applications across AI, travel, healthcare, commerce and enterprise — built with React.js and shipped to real users."
+          />
+
+          <Reveal className="projects-filter" role="group" aria-label="Filter projects by company">
+            {projectFilters.map((option) => {
+              const count = projects.filter((p) => option.id === "all" || p.company === option.id).length;
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  className={`projects-filter-btn ${filter === option.id ? "is-active" : ""}`}
+                  aria-pressed={filter === option.id}
+                  onClick={() => setFilter(option.id)}
+                >
+                  {option.label}
+                  <span className="projects-filter-count">{count}</span>
+                </button>
+              );
+            })}
+          </Reveal>
+        </div>
+
+        <ul className={`projects-grid ${filter === "all" ? "projects-grid--all" : ""}`} key={filter}>
+          {visible.map((project, index) => (
+            <Reveal
+              as="li"
+              key={project.id}
+              className={project.featured && filter === "all" ? "projects-grid-featured" : ""}
+              delay={(index % 3) * 90}
+            >
+              <ProjectCard project={project} featured={project.featured && filter === "all"} />
+            </Reveal>
+          ))}
+        </ul>
+
+        <p className="projects-note">
+          Live links open the production sites in a new tab.
         </p>
       </div>
-
-      <div className="projects-container">
-        {projectGroups.map((group, groupIndex) => (
-          <div key={groupIndex} className="project-group">
-            <h4 className="project-group-title">
-              <svg
-                className="company-icon"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              {group.company}
-            </h4>
-
-            <div className="projects-grid">
-              {group.projects.map((project, projIndex) => (
-                <div key={projIndex} className="project-card card">
-                  <h5 className="project-name">{project.name}</h5>
-                  <p className="project-description">{project.description}</p>
-
-                  <div className="project-highlights">
-                    <h6 className="highlights-title">Key Achievements:</h6>
-                    <ul className="highlights-list">
-                      {project.highlights.map((highlight, hlIndex) => (
-                        <li key={hlIndex}>{highlight}</li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="project-tags">
-                    {project.tags.map((tag, tagIndex) => (
-                      <span key={tagIndex} className="project-tag">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    </section>
   );
 };
 

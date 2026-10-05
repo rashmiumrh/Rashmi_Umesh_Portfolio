@@ -1,61 +1,67 @@
 import React from "react";
-import "../CSS/Portfoliosections.css";
+import Reveal from "./Reveal";
+import Icon from "./Icon";
+import SectionHeader from "./SectionHeader";
+import { certifications, education } from "../data/resume";
+import "../CSS/Education.css";
 
-const Education = ({ isVisible }) => {
-  const education = [
-    {
-      degree: "Bachelor of Engineering in Computer Science",
-      institution: "MVJ College of Engineering, Bangalore",
-      period: "2018 - 2022",
-      score: "7.18 CGPA",
-      description: "Comprehensive computer science education focusing on software development, algorithms, and web technologies."
-    },
-    {
-      degree: "Pre-University Course (PCMB)",
-      institution: "Shree Vasavi PU College, Challakere",
-      period: "2016 - 2018",
-      score: "72%",
-      description: "Strong foundation in Physics, Chemistry, Mathematics, and Biology."
-    }
-  ];
+const Education = () => (
+  <section id="education" className="section" aria-labelledby="education-title">
+    <div className="container">
+      <SectionHeader
+        id="education-title"
+        index="05"
+        eyebrow="Education & certifications"
+        title="Foundations &"
+        accent="credentials"
+      />
 
-  return (
-    <div className={`section-content ${isVisible ? "animate-fadeInUp" : ""}`}>
-      <div className="section-intro">
-        <h3 className="section-title">Academic Background</h3>
-        <p className="section-subtitle">
-          Building a strong foundation in computer science and engineering
-        </p>
-      </div>
+      <div className="education-layout">
+        <Reveal as="article" className="education-card surface-card">
+          <span className="education-icon" aria-hidden="true">
+            <Icon name="graduationCap" size={26} strokeWidth={1.5} />
+          </span>
+          <p className="education-period">{education.period}</p>
+          <h3 className="education-degree">{education.degree}</h3>
+          <p className="education-institution">
+            {education.institution}
+            <span>
+              <Icon name="mapPin" size={14} />
+              {education.location}
+            </span>
+          </p>
+        </Reveal>
 
-      <div className="section-grid section-grid-2">
-        {education.map((edu, index) => (
-          <div key={index} className="education-card card">
-            <div className="card-header">
-              <div className="card-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 14L21 9L12 4L3 9L12 14Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M12 14L12 22" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                  <path d="M6.5 11.5V16.5C6.5 16.5 8 19 12 19C16 19 17.5 16.5 17.5 16.5V11.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              <span className="card-badge">{edu.period}</span>
-            </div>
-            
-            <h4 className="card-title">{edu.degree}</h4>
-            <p className="card-institution">{edu.institution}</p>
-            
-            <div className="card-score">
-              <span className="score-label">Academic Performance:</span>
-              <span className="score-value gradient-text">{edu.score}</span>
-            </div>
-            
-            <p className="card-description">{edu.description}</p>
-          </div>
-        ))}
+        <div className="cert-block">
+          <Reveal as="h3" className="cert-heading">
+            <Icon name="award" size={18} />
+            Certifications
+          </Reveal>
+
+          <ul className="cert-grid">
+            {certifications.map((cert, index) => (
+              <Reveal as="li" key={cert.title} delay={index * 70}>
+                <a
+                  href={cert.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cert-card surface-card"
+                  aria-label={`${cert.title} certification by ${cert.issuer}, ${cert.year} — view credential (opens in a new tab)`}
+                >
+                  <span className="cert-card-top">
+                    <span className="cert-issuer">{cert.issuer}</span>
+                    <Icon name="arrowUpRight" size={16} className="cert-arrow" />
+                  </span>
+                  <span className="cert-title">{cert.title}</span>
+                  <span className="cert-meta">Certified · {cert.year}</span>
+                </a>
+              </Reveal>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
-  );
-};
+  </section>
+);
 
 export default Education;
