@@ -26,7 +26,7 @@ export const profile = {
   phoneHref: "tel:+918747035258",
   linkedin: "https://www.linkedin.com/in/rashmi-u-6ab07a213/",
   resume:
-    "https://drive.google.com/file/d/1UYo0Fj8nCndPRvCyCM5aCCfPCa-ispii/view",
+    "https://drive.google.com/file/d/13-lOrQhSzmvDqk9l_2UDS4XddjgGb8hF/view",
   intro:
     "building responsive, production-grade web applications with React.js, TypeScript, Redux and Tailwind CSS — from reusable component architecture and REST API integration through to deployment on AWS.",
   heroStack: ["React.js", "TypeScript", "Redux", "Tailwind CSS", "AWS"],
